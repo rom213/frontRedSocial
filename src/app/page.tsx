@@ -1,6 +1,7 @@
 import Users from '../app/components/Users';
 import CreatePost from './components/CreatePost';
 
+
 interface User {
   id: number;
   username: string;
@@ -10,7 +11,7 @@ interface User {
   country: string;
 }
 
-interface Post {
+export interface Post {
   id: number;
   img_post:string;
   contenido: string;
@@ -27,6 +28,7 @@ async function fetchUser(): Promise<Post[]> {
   const timestamp = new Date().getTime();
   const res = await fetch(`http://localhost:8080/api/v1/publicaciones?timestamp=${timestamp}`);
   const data = await res.json();
+  data.reverse()
   return data;
 }
 

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { AiFillLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { PostProps } from "../page";
-import { FiMoreVertical } from "react-icons/fi";
 
 
 
@@ -15,10 +14,10 @@ async function fetchLikes(id: number): Promise<any[]> {
   }
 
 
-const Users: React.FC<PostProps> = async({ post }) => {
+const Posts: React.FC<PostProps> = async({ post }) => {
     const like: any[] = await fetchLikes(post.id);
     return (
-        <div className="flex-grow rounded-xl overflow-hidden w-100"  style={{background:"linear-gradient(0deg, rgba(249,253,254,1) 31%, rgb(37, 204, 219) 100%)"}}>
+        <Link className="flex-grow bg-gray-200 rounded-xl overflow-hidden w-100" href={`/users/${post.id}`}>
             <div key={post.id}>
                 <div className="p-5 flex gap-3">
                     <img src={post.user.avatar} alt={`${post.user.avatar}`} className="rounded-full max-w-20 max-h-10" />
@@ -39,10 +38,12 @@ const Users: React.FC<PostProps> = async({ post }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
 
 
     )
 }
 
-export default Users
+export default Posts
+
+

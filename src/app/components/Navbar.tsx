@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react'
 import useStore from '../store/store';
+import { IoPower } from "react-icons/io5";
+import { CiHome } from "react-icons/ci";
 interface User {
     id: number;
     username: string;
@@ -33,11 +35,13 @@ const Navbar = () => {
     const { token } = useStore()
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
-        settoken(storedToken); // Almacenar el token en el estado local
+        settoken(storedToken);
         if (storedToken) {
             handleInfoTOken();
         }
     }, [token])
+
+    
 
     const handleInfoTOken = async () => {
 
@@ -56,6 +60,10 @@ const Navbar = () => {
             if (response.ok) {
                 const data = await response.json()
                 setClaims(data);
+            }else{
+                localStorage.removeItem("token")
+                window.location.reload();
+                router.push("/")
             }
         } catch (error) {
             console.error('no autorizado:', error);
@@ -63,10 +71,10 @@ const Navbar = () => {
     };
 
     return (
-        <div className="fixed w-full shadow-sm flex justify-between align-middle py-2 px-20" style={{ backgroundColor: "#FBF3D5" }}>
-            <h1 className='text-4xl'>NexusNet</h1>
+        <div className="fixed w-full flex justify-between align-middle py-2 px-20" style={{ backgroundColor: "#6AD4DD", zIndex:"100" }}>
+            <h1 className='text-4xl'>NexNet</h1>
             <div className="flex gap-6 text-2xl">
-                <Link href={"/"}>Home</Link>
+                <Link href={"/"}><CiHome style={{fontSize:"35px"}} /></Link>
                 {
                     !tokens ? <>
                         <Link href={"/login"}>Login</Link>
@@ -74,15 +82,17 @@ const Navbar = () => {
                     </> : <>
                         <div className='cursor-pointer' onClick={() => {
                             localStorage.removeItem("token");
+                            router.push("/")
+                            window.location.reload()
                             settoken(null);
-                        }}>Logout</div>
+                        }}><IoPower style={{fontSize:"35px", color:"red", opacity:"0.8"}} /></div>
 
                         <div onClick={() => {
                             if (!(patname == `/users/${claims?.user.id}`)) {
                                 router.push(`users/${claims?.user.id}`)
                             }
                         }
-                        } className='flex gap-3'>
+                        } className='flex gap-3 cursor-pointer'>
                             <img className='rounded-full max-w-20 max-h-10' src={`${claims?.user.avatar}`} alt="" />
                             <p className='text-sm font-normal'>{claims?.user.firstname}</p>
                         </div>
